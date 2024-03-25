@@ -1,0 +1,3 @@
+[flake8]
+exclude = .git,__pycache__,docs/source/conf.py,old,build,dist,.venv,venv,env,.env,test_*.py,__init__.py
+max-line-length = 100
