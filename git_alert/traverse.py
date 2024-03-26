@@ -5,9 +5,7 @@ from pathlib import Path
 from repositories import Repositories
 
 
-def traverse_directory(
-    pth: Path, repos: Repositories, verbose: bool, only_dirty: bool
-) -> None:
+def traverse_directory(pth: Path, repos: Repositories, verbose: bool) -> None:
     files = pth.glob("*")
     for file in files:
         if file.is_dir() and file.name == ".git":
@@ -30,4 +28,4 @@ def traverse_directory(
                 repos.add_repo(repo)
 
         elif file.is_dir():
-            traverse_directory(file, repos, verbose, only_dirty)
+            traverse_directory(file, repos, verbose)
