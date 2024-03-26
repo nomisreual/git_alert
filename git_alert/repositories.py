@@ -1,8 +1,11 @@
+from pathlib import Path
+
+
 class Repositories:
     def __init__(self) -> None:
-        self.repos = []
+        self.repos: list[dict[Path, str]] = []
 
-    def add_repo(self, repo: dict) -> None:
+    def add_repo(self, repo: dict[Path, str]) -> None:
         self.repos.append(repo)
 
     def display(self, only_dirty: bool) -> None:
