@@ -8,11 +8,11 @@ def argument_parser() -> Namespace:
         "--path",
         type=Path,
         default=Path.cwd(),
-        help="Top level directory to start the search in",
+        help="top level directory to start the search in",
     )
     parser.add_argument(
         "--only_dirty",
         action="store_true",
-        help="In the final report only show dirty repositories",
+        help="report only show dirty repositories in the final",
     )
     return parser.parse_args()
