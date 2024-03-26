@@ -1,6 +1,7 @@
-from argparse import ArgumentParser, Namespace
+from argparse import Namespace
 from pathlib import Path
 
+from argument_parser import argument_parser
 from repositories import Repositories
 from traverse import traverse_directory
 
@@ -19,9 +20,4 @@ def main(args: Namespace) -> None:
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument("--path", type=Path, default=Path.cwd())
-    parser.add_argument("--verbose", action="store_true")
-    parser.add_argument("--only_dirty", action="store_true")
-    args = parser.parse_args()
-    main(args)
+    main(argument_parser())
