@@ -2,7 +2,7 @@
 import subprocess
 from pathlib import Path
 
-from repositories import Repositories
+from git_alert.repositories import Repositories
 
 
 def traverse_directory(pth: Path, repos: Repositories) -> None:
