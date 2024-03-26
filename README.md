@@ -15,3 +15,8 @@ options:
   --path PATH   top level directory to start the search in
   --only_dirty  only show dirty repositories in the final report
 ```
+
+## Planned:
+
+- [ ] speed up the lookup process
+- [ ] enable caching found repositories for faster checking after the first run (maybe utilizing a database)
