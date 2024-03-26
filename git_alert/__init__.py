@@ -8,7 +8,7 @@ def main() -> None:
 
     args = argument_parser()
 
-    traverse_directory(args.path, repos, args.verbose)
+    traverse_directory(args.path, repos)
 
     repos.display(only_dirty=args.only_dirty)
 
