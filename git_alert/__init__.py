@@ -1,12 +1,12 @@
-from argparse import Namespace
-
 from argument_parser import argument_parser
 from repositories import Repositories
 from traverse import traverse_directory
 
 
-def main(args: Namespace) -> None:
+def main() -> None:
     repos = Repositories()
+
+    args = argument_parser()
 
     traverse_directory(args.path, repos, args.verbose, args.only_dirty)
 
@@ -14,4 +14,4 @@ def main(args: Namespace) -> None:
 
 
 if __name__ == "__main__":
-    main(argument_parser())
+    main()
