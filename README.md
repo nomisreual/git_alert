@@ -12,6 +12,6 @@ usage: __init__.py [-h] [--path PATH] [--only_dirty]
 
 options:
   -h, --help    show this help message and exit
-  --path PATH
-  --only_dirty
+  --path PATH   top level directory to start the search in
+  --only_dirty  only show dirty repositories in the final report
 ```

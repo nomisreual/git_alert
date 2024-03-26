@@ -13,6 +13,6 @@ def argument_parser() -> Namespace:
     parser.add_argument(
         "--only_dirty",
         action="store_true",
-        help="report only show dirty repositories in the final",
+        help="only show dirty repositories in the final report",
     )
     return parser.parse_args()
