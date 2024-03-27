@@ -16,6 +16,11 @@ options:
   --only_dirty  only show dirty repositories in the final report
 ```
 
+As an installed package:
+```
+python -m git_alert [--path PATH] [--only_dirty]
+```
+
 ## Planned:
 
 - [ ] speed up the lookup process
