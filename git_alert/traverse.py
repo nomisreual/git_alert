@@ -5,24 +5,32 @@ from pathlib import Path
 from git_alert.repositories import Repositories
 
 
-def traverse_directory(pth: Path, repos: Repositories) -> None:
-    files = pth.glob("*")
-    for file in files:
-        if file.is_dir() and file.name == ".git":
-            check_status(file, repos)
+class GitAlert:
+    def __init__(self, pth: Path, repos: Repositories):
+        self._pth = pth
+        self._repos = repos
 
-        elif file.is_dir():
-            traverse_directory(file, repos)
+    def traverse(self, pth: Path) -> None:
+        files = pth.glob("*")
+        for file in files:
+            if file.is_dir() and file.name == ".git":
+                self.check(file)
 
+            elif file.is_dir():
+                self.traverse(file)
 
-def check_status(directory: Path, repos: Repositories) -> None:
-    repo = {}
-    output = subprocess.run(
-        ["git", "status"], cwd=directory.parent, stdout=subprocess.PIPE
-    )
-    if "working tree clean" in output.stdout.decode():
-        repo[directory.parent] = "clean"
-        repos.add_repo(repo)
-    else:
-        repo[directory.parent] = "dirty"
-        repos.add_repo(repo)
+    def check(self, pth: Path) -> None:
+        repo = {}
+        output = subprocess.run(
+            ["git", "status"], cwd=pth.parent, stdout=subprocess.PIPE
+        )
+        if "working tree clean" in output.stdout.decode():
+            repo[pth.parent] = "clean"
+            self._repos.add_repo(repo)
+        else:
+            repo[pth.parent] = "dirty"
+            self._repos.add_repo(repo)
+
+    @property
+    def repos(self) -> Repositories:
+        return self._repos
