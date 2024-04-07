@@ -11,6 +11,11 @@ class GitAlert:
         self._repos = repos
 
     def traverse(self, pth: Path) -> None:
+        """
+        Traverse the directory and its subdirectories and check if it is a git repository.
+        args:
+            pth: Path
+        """
         files = pth.glob("*")
         for file in files:
             if file.is_dir() and file.name == ".git":
@@ -20,6 +25,11 @@ class GitAlert:
                 self.traverse(file)
 
     def check(self, pth: Path) -> None:
+        """
+        Check if the git repository is clean or dirty.
+        args:
+            pth: Path
+        """
         repo = {}
         output = subprocess.run(
             ["git", "status"], cwd=pth.parent, stdout=subprocess.PIPE

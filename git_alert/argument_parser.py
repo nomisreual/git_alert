@@ -3,6 +3,11 @@ from pathlib import Path
 
 
 def argument_parser() -> Namespace:
+    """
+    Create argument parser providing two arguments:
+    --path: Path, default: Path.cwd()
+    --only_dirty: bool, default: False
+    """
     parser = ArgumentParser()
     parser.add_argument(
         "--path",
