@@ -128,12 +128,13 @@ class TestGitAlertCheck(unittest.TestCase):
         # appropriately:
         repos.add_repo.assert_called_once_with({"/parent": "dirty"})
 
-    class TestGitAlertRepos(unittest.TestCase):
-        def test_git_alert_repos(self):
-            # Create GitAlert instance
-            repos = Mock()
-            alert = GitAlert(Mock(), repos)
 
-            # Assert whether the repos property returns the correct value:
-            repos_call = alert.repos
-            self.assertEqual(repos_call, repos)
+class TestGitAlertRepos(unittest.TestCase):
+    def test_git_alert_repos(self):
+        # Create GitAlert instance
+        repos = Mock()
+        alert = GitAlert(Mock(), repos)
+
+        # Assert whether the repos property returns the correct value:
+        repos_call = alert.repos
+        self.assertEqual(repos_call, repos)
