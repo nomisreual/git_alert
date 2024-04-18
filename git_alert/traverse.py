@@ -1,5 +1,6 @@
 # main.py
 import subprocess
+import sys
 from pathlib import Path
 
 from git_alert.repositories import Repositories
@@ -16,13 +17,16 @@ class GitAlert:
         args:
             pth: Path
         """
-        files = pth.glob("*")
-        for file in files:
-            if file.is_dir() and file.name == ".git":
-                self.check(file)
+        try:
+            files = pth.glob("*")
+            for file in files:
+                if file.is_dir() and file.name == ".git":
+                    self.check(file)
 
-            elif file.is_dir():
-                self.traverse(file)
+                elif file.is_dir():
+                    self.traverse(file)
+        except PermissionError:
+            print(f"Warning: Permission denied for {pth}", file=sys.stderr)
 
     def check(self, pth: Path) -> None:
         """
