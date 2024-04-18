@@ -88,4 +88,52 @@ class TestGitAlertTraversePermissionDenied(unittest.TestCase):
 
 
 class TestGitAlertCheck(unittest.TestCase):
-    pass
+    @patch("git_alert.traverse.subprocess")
+    def test_git_alert_check_clean(self, mock_subprocess):
+        # Mock the return value of the subprocess.run method:
+        output = Mock()
+        output.stdout.decode.return_value = "working tree clean"
+        mock_subprocess.run.return_value = output
+
+        pth = Mock()
+        pth.parent = "/parent"
+
+        # Create GitAlert instance
+        repos = Mock()
+        alert = GitAlert(Mock(), repos)
+
+        # Call the check method on the mocked path:
+        alert.check(pth)
+        # Assert whether the mocked repo's add_repo method was calles
+        # appropriately:
+        repos.add_repo.assert_called_once_with({"/parent": "clean"})
+
+    @patch("git_alert.traverse.subprocess")
+    def test_git_alert_check_dirty(self, mock_subprocess):
+        # Mock the return value of the subprocess.run method:
+        output = Mock()
+        output.stdout.decode.return_value = "Changes not staged for commit"
+        mock_subprocess.run.return_value = output
+
+        pth = Mock()
+        pth.parent = "/parent"
+
+        # Create GitAlert instance
+        repos = Mock()
+        alert = GitAlert(Mock(), repos)
+
+        # Call the check method on the mocked path:
+        alert.check(pth)
+        # Assert whether the mocked repo's add_repo method was calles
+        # appropriately:
+        repos.add_repo.assert_called_once_with({"/parent": "dirty"})
+
+    class TestGitAlertRepos(unittest.TestCase):
+        def test_git_alert_repos(self):
+            # Create GitAlert instance
+            repos = Mock()
+            alert = GitAlert(Mock(), repos)
+
+            # Assert whether the repos property returns the correct value:
+            repos_call = alert.repos
+            self.assertEqual(repos_call, repos)
