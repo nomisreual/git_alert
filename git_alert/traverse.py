@@ -1,4 +1,4 @@
-# main.py
+# traverse.py
 import subprocess
 import sys
 from pathlib import Path
@@ -26,7 +26,7 @@ class GitAlert:
                 elif file.is_dir():
                     self.traverse(file)
         except PermissionError:
-            print(f"Warning: Permission denied for {pth}", file=sys.stderr)
+            print(f"Warning: no access to: {pth}", file=sys.stderr)
 
     def check(self, pth: Path) -> None:
         """
