@@ -1,3 +1,4 @@
+import sys
 import unittest
 from unittest.mock import MagicMock, Mock, patch
 
@@ -62,3 +63,29 @@ class TestGitAlertTraverse(unittest.TestCase):
         mock_path.glob.assert_called_once_with("*")
         # Test if check method is not called:
         alert.check.assert_not_called()
+
+
+class TestGitAlertTraversePermissionDenied(unittest.TestCase):
+    @patch("git_alert.traverse.print")
+    @patch("git_alert.traverse.Path")
+    def test_traverse_permission_denied(self, mock_path, mock_print):
+        # Mock the glob method to raise a PermissionError:
+        mock_path.glob.side_effect = PermissionError()
+
+        # Create GitAlert instance
+        # Check is not really executed, hence a simple Mock as
+        # repos argument suffices:
+        alert = GitAlert(mock_path, Mock())
+
+        # Mocking check not required, as it will not get called.
+
+        alert.traverse(mock_path)
+
+        # Check whether the correct warning was emitted:
+        mock_print.assert_called_once_with(
+            f"Warning: no access to: {mock_path}", file=sys.stderr
+        )
+
+
+class TestGitAlertCheck(unittest.TestCase):
+    pass
