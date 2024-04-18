@@ -2,7 +2,7 @@ from argparse import ArgumentParser, Namespace
 from pathlib import Path
 
 
-def argument_parser() -> Namespace:
+def argument_parser(args) -> Namespace:
     """
     Create argument parser providing two arguments:
     --path: Path, default: Path.cwd()
@@ -20,4 +20,4 @@ def argument_parser() -> Namespace:
         action="store_true",
         help="only show dirty repositories in the final report",
     )
-    return parser.parse_args()
+    return parser.parse_args(args)
