@@ -1,11 +1,9 @@
-<h1 text-align="center">Git Alert</h1>
+# Git Alert
 
 <hr>
 
-<p text-align="center">
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 ![Codecov](https://img.shields.io/codecov/c/github/nomisreual/git_alert)
-</p>
 
 This is a Python application that checks in the given directory and all its subdirectories
 for any dirty repositories.
