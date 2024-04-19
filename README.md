@@ -6,6 +6,8 @@
 
 <!-- END BADGIE TIME -->
 
+![Codecov](https://img.shields.io/codecov/c/github/nomisreual/git_alert)
+
 This is a Python application that checks in the given directory and all its subdirectories
 for any dirty repositories.
 
