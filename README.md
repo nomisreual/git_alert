@@ -75,7 +75,7 @@ This project is under active development, so any contributions are welcome. Feel
 
 In case you want to submit a pull request, please:
 
-- make sure to run the tests before
+- make sure to run the tests before submission
 - use black for code formatting
 
 The project uses pre-commit hooks to ensure code quality, so feel free to use them as well.
