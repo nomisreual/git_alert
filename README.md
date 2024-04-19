@@ -1,5 +1,11 @@
 # Git Alert
 
+<!-- BADGIE TIME -->
+
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+
+<!-- END BADGIE TIME -->
+
 This is a Python application that checks in the given directory and all its subdirectories
 for any dirty repositories.
 
@@ -17,6 +23,7 @@ options:
 ```
 
 As an installed package:
+
 ```
 python -m git_alert [--path PATH] [--only_dirty]
 ```
