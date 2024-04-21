@@ -8,6 +8,8 @@
 This is a Python application that checks in the given directory and all its subdirectories
 for any dirty repositories.
 
+The source code is available on [GitHub](https://github.com/nomisreual/git_alert).
+
 This application aims to ease the frequent use of git as it makes it easy to check for any untracked changes in any of your repositories.
 
 ## Installation:
