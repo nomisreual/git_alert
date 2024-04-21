@@ -12,13 +12,13 @@ This application aims to ease the frequent use of git as it makes it easy to che
 
 ## Installation:
 
-The application is now available on PyPI, so you can install it using pip:
+The application is now available on **PyPI**, so you can install it using _pip_:
 
 ```
 pip install git_alert
 ```
 
-Alternatively, you can use pipx to make it globally available:
+Alternatively, you can use _pipx_ to make it globally available:
 
 ```
 pipx install git_alert
@@ -44,6 +44,56 @@ or
 ```
 pipx install .
 ```
+
+If you are using flakes to manage your NixOS installation, you can add the provided flake to your
+inputs:
+
+```nix
+{
+  description = "Configuration";
+
+  inputs = {
+    ...
+    git_alert = {
+      url = "github:nomisreual/git_alert";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    ...
+  };
+  outputs = {
+    self,
+    nixpkgs,
+    ...
+  } @ inputs: {
+    # your configuration
+  };
+}
+```
+
+You can then add git*alert to your packages (don't forget to add \_inputs* to the respective module):
+
+```nix
+# configuration.nix
+{
+  environment.systemPackages = with pkgs; [
+    ...
+
+    inputs.git_alert.packages."x86_64-linux".default
+    ...
+  ];
+}
+# home.nix
+{
+  home.packages = with pkgs; [
+    ...
+
+    inputs.git_alert.packages."x86_64-linux".default
+    ...
+  ];
+}
+```
+
+After rebuilding, you have git_alert at your fingertips and it gets updated whenever you update your flake.
 
 ## Usage:
 
