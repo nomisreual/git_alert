@@ -70,7 +70,7 @@ inputs:
 }
 ```
 
-You can then add git*alert to your packages (don't forget to add \_inputs* to the respective module):
+You can then add `git_alert` to your packages (don't forget to add `inputs` to the respective module):
 
 ```nix
 # configuration.nix
