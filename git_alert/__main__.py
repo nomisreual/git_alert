@@ -11,4 +11,5 @@ args = argument_parser(sys.argv[1:])
 alert = GitAlert(args.path, repos)
 
 alert.traverse(args.path)
+alert.check()
 alert.repos.display(only_dirty=args.only_dirty)

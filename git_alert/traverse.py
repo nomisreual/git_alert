@@ -21,29 +21,28 @@ class GitAlert:
             files = pth.glob("*")
             for file in files:
                 if file.is_dir() and file.name == ".git":
-                    self.check(file)
+                    repo = {}
+                    repo[file.parent] = None
+                    self._repos.add_repo(repo)
 
                 elif file.is_dir():
                     self.traverse(file)
         except PermissionError:
             print(f"Warning: no access to: {pth}", file=sys.stderr)
 
-    def check(self, pth: Path) -> None:
+    def check(self) -> None:
         """
-        Check if the git repository is clean or dirty.
-        args:
-            pth: Path
+        Check if the git repositories found are clean or dirty.
         """
-        repo = {}
-        output = subprocess.run(
-            ["git", "status"], cwd=pth.parent, stdout=subprocess.PIPE
-        )
-        if "working tree clean" in output.stdout.decode():
-            repo[pth.parent] = "clean"
-            self._repos.add_repo(repo)
-        else:
-            repo[pth.parent] = "dirty"
-            self._repos.add_repo(repo)
+        for repo in self._repos.repos:
+            for pth, status in repo.items():
+                output = subprocess.run(
+                    ["git", "status"], cwd=pth, stdout=subprocess.PIPE
+                )
+                if "working tree clean" in output.stdout.decode():
+                    repo[pth] = "clean"
+                else:
+                    repo[pth] = "dirty"
 
     @property
     def repos(self) -> Repositories:
