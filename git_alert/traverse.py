@@ -22,7 +22,8 @@ class GitAlert:
             for file in files:
                 if file.is_dir() and file.name == ".git":
                     repo = {}
-                    repo[file.parent] = None
+                    repo["path"] = file.parent
+                    repo["status"] = None
                     self._repos.add_repo(repo)
 
                 elif file.is_dir():
@@ -35,14 +36,12 @@ class GitAlert:
         Check if the git repositories found are clean or dirty.
         """
         for repo in self._repos.repos:
-            for pth, status in repo.items():
-                output = subprocess.run(
-                    ["git", "status"], cwd=pth, stdout=subprocess.PIPE
-                )
-                if "working tree clean" in output.stdout.decode():
-                    repo[pth] = "clean"
-                else:
-                    repo[pth] = "dirty"
+            pth = repo.get("path")
+            output = subprocess.run(["git", "status"], cwd=pth, stdout=subprocess.PIPE)
+            if "working tree clean" in output.stdout.decode():
+                repo["status"] = "clean"
+            else:
+                repo["status"] = "dirty"
 
     @property
     def repos(self) -> Repositories:
