@@ -7,9 +7,10 @@ from git_alert.repositories import Repositories
 
 
 class GitAlert:
-    def __init__(self, pth: Path, repos: Repositories):
+    def __init__(self, pth: Path, repos: Repositories, ignore: list[str] = []) -> None:
         self._pth = pth
         self._repos = repos
+        self._ignore = {pth: True for pth in ignore}
 
     def traverse(self, pth: Path) -> None:
         """
@@ -20,14 +21,17 @@ class GitAlert:
         try:
             files = pth.glob("*")
             for file in files:
-                if file.is_dir() and file.name == ".git":
-                    repo = {}
-                    repo["path"] = file.parent
-                    repo["status"] = None
-                    self._repos.add_repo(repo)
+                if file in self._ignore:
+                    continue
+                else:
+                    if file.is_dir() and file.name == ".git":
+                        repo = {}
+                        repo["path"] = file.parent
+                        repo["status"] = None
+                        self._repos.add_repo(repo)
 
-                elif file.is_dir():
-                    self.traverse(file)
+                    elif file.is_dir():
+                        self.traverse(file)
         except PermissionError:
             print(f"Warning: no access to: {pth}", file=sys.stderr)
 
