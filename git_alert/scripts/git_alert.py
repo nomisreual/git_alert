@@ -10,7 +10,7 @@ def run():
 
     args = argument_parser(sys.argv[1:])
 
-    alert = GitAlert(args.path, repos)
+    alert = GitAlert(pth=args.path, ignore=args.ignore, repos=repos)
 
     alert.traverse(args.path)
     alert.check()

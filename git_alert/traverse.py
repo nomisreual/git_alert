@@ -18,20 +18,19 @@ class GitAlert:
         args:
             pth: Path
         """
+        if pth in self._ignore:
+            return
         try:
             files = pth.glob("*")
             for file in files:
-                if file in self._ignore:
-                    continue
-                else:
-                    if file.is_dir() and file.name == ".git":
-                        repo = {}
-                        repo["path"] = file.parent
-                        repo["status"] = None
-                        self._repos.add_repo(repo)
+                if file.is_dir() and file.name == ".git":
+                    repo = {}
+                    repo["path"] = file.parent
+                    repo["status"] = None
+                    self._repos.add_repo(repo)
 
-                    elif file.is_dir():
-                        self.traverse(file)
+                elif file.is_dir():
+                    self.traverse(file)
         except PermissionError:
             print(f"Warning: no access to: {pth}", file=sys.stderr)
 
