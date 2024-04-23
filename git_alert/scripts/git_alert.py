@@ -15,3 +15,4 @@ def run():
     alert.traverse(args.path)
     alert.check()
     alert.repos.display(only_dirty=args.only_dirty)
+    alert.repos.summary()
