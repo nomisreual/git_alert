@@ -28,6 +28,7 @@ class GitAlert:
                     repo["path"] = file.parent
                     repo["status"] = None
                     self._repos.add_repo(repo)
+                    return
 
                 elif file.is_dir():
                     self.traverse(file)
