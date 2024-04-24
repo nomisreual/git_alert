@@ -40,8 +40,7 @@ class GitAlert:
         """
         Check if the git repositories found are clean or dirty.
         """
-        for repo in self._repos.repos:
-            pth = repo.get("path")
+        for pth, repo in self._repos.repos.items():
             output = subprocess.run(["git", "status"], cwd=pth, stdout=subprocess.PIPE)
             if "working tree clean" in output.stdout.decode():
                 repo["status"] = "clean"

@@ -1,6 +1,6 @@
 class Repositories:
     def __init__(self) -> None:
-        self.repos: list[dict[str, str]] = []
+        self.repos: dict[dict[str, str]] = {}
         self.number_of_repositories = 0
 
     def add_repo(self, repo: dict[str, str]) -> None:
@@ -9,7 +9,9 @@ class Repositories:
         args:
             repo: dict[str, str]
         """
-        self.repos.append(repo)
+        pth = repo.get("path")
+        status = repo.get("status")
+        self.repos[pth] = {"status": status}
         self.number_of_repositories += 1
 
     def display(self, only_dirty: bool) -> None:
@@ -18,8 +20,7 @@ class Repositories:
         args:
             only_dirty: bool
         """
-        for repo in self.repos:
-            pth = repo.get("path")
+        for pth, repo in self.repos.items():
             status = repo.get("status")
             if only_dirty and status == "clean":
                 continue
@@ -34,4 +35,5 @@ class Repositories:
 
     @property
     def number_of_dirty_repositories(self):
-        return sum(repo["status"] == "dirty" for repo in self.repos)
+        dirty = [1 for repo in self.repos.values() if repo.get("status") == "dirty"]
+        return sum(dirty)
