@@ -102,12 +102,15 @@ After rebuilding, you have git_alert at your fingertips and it gets updated when
 You can use _git_alert_ by either calling it as a module (`python -m git_alert`) or by directly using the installed package:
 
 ```
-usage: git_alert [-h] [--path PATH] [--only_dirty]
+usage: git_alert [-h] [--path PATH] [--only_dirty] [--ignore IGNORE]
 
 options:
-  -h, --help    show this help message and exit
-  --path PATH   top level directory to start the search in
-  --only_dirty  only show dirty repositories in the final report
+  -h, --help       show this help message and exit
+  --path PATH      top level directory to start the search in
+  --only_dirty     only show dirty repositories in the final report
+  --ignore IGNORE  colon separated list of paths to ignore
+
+Warning: adding a path to ignore will also ignore all subdirectories of that path.
 ```
 
 ## Development:
