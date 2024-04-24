@@ -6,6 +6,20 @@ from git_alert.traverse import GitAlert
 
 
 class TestGitAlertTraverse(unittest.TestCase):
+    def test_traverse_ignored_path(self):
+        # Mock pth, repos and ignore:
+        pth = MagicMock()
+        ignore = [pth]
+
+        # Create a GitAlert instance:
+        alert = GitAlert(pth, Mock(), ignore)
+
+        # Call the .traverse method:
+        alert.traverse(pth)
+
+        # Check if the .traverse method returned early:
+        pth.glob.assert_not_called()
+
     def test_traverse_git_present(self):
         # Mock pth, repos and ignore:
         pth = MagicMock()
