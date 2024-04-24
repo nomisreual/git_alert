@@ -7,9 +7,10 @@ from git_alert.repositories import Repositories
 
 
 class GitAlert:
-    def __init__(self, pth: Path, repos: Repositories):
+    def __init__(self, pth: Path, repos: Repositories, ignore: list[str] = []) -> None:
         self._pth = pth
         self._repos = repos
+        self._ignore = {pth: True for pth in ignore}
 
     def traverse(self, pth: Path) -> None:
         """
@@ -17,33 +18,34 @@ class GitAlert:
         args:
             pth: Path
         """
-        try:
-            files = pth.glob("*")
-            for file in files:
-                if file.is_dir() and file.name == ".git":
-                    self.check(file)
+        if pth in self._ignore:
+            return
 
-                elif file.is_dir():
-                    self.traverse(file)
+        try:
+            files = list(pth.glob("*"))
+
+            if pth.joinpath(".git") in files:
+                repo = {}
+                repo["path"] = pth
+                repo["status"] = None
+                self._repos.add_repo(repo)
+            else:
+                for file in files:
+                    if file.is_dir():
+                        self.traverse(file)
         except PermissionError:
             print(f"Warning: no access to: {pth}", file=sys.stderr)
 
-    def check(self, pth: Path) -> None:
+    def check(self) -> None:
         """
-        Check if the git repository is clean or dirty.
-        args:
-            pth: Path
+        Check if the git repositories found are clean or dirty.
         """
-        repo = {}
-        output = subprocess.run(
-            ["git", "status"], cwd=pth.parent, stdout=subprocess.PIPE
-        )
-        if "working tree clean" in output.stdout.decode():
-            repo[pth.parent] = "clean"
-            self._repos.add_repo(repo)
-        else:
-            repo[pth.parent] = "dirty"
-            self._repos.add_repo(repo)
+        for pth, repo in self._repos.repos.items():
+            output = subprocess.run(["git", "status"], cwd=pth, stdout=subprocess.PIPE)
+            if "working tree clean" in output.stdout.decode():
+                repo["status"] = "clean"
+            else:
+                repo["status"] = "dirty"
 
     @property
     def repos(self) -> Repositories:

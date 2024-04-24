@@ -14,3 +14,11 @@ class TestArgumentParser(unittest.TestCase):
         args = argument_parser(["--path", "/path/to/repo"])
         self.assertEqual(args.path, Path("/path/to/repo"))
         self.assertEqual(args.only_dirty, False)
+
+    def test_argument_parser_ignore(self):
+        args = argument_parser(
+            ["--path", "/path/to/repo", "--ignore", "/path/to/ignore"]
+        )
+        self.assertEqual(args.path, Path("/path/to/repo"))
+        self.assertEqual(args.only_dirty, False)
+        self.assertEqual(args.ignore, [Path("/path/to/ignore")])

@@ -6,106 +6,124 @@ from git_alert.traverse import GitAlert
 
 
 class TestGitAlertTraverse(unittest.TestCase):
-    @patch("git_alert.traverse.Path")
-    def test_traverse_git_present(self, mock_path):
-        # Mock the return value of the glob method:
-        glob_result = []
+    def test_traverse_ignored_path(self):
+        # Mock pth, repos and ignore:
+        pth = MagicMock()
+        ignore = [pth]
 
-        # Mock one path that is a git repository:
-        dir = Mock()
-        dir.is_dir.return_value = True
-        dir.name = ".git"
+        # Create a GitAlert instance:
+        alert = GitAlert(pth, Mock(), ignore)
 
-        # Add the mocked git directory to the glob result:
-        glob_result.append(dir)
-        # The return value of glob needs to be iterable:
-        mock_path.glob.return_value = iter(glob_result)
+        # Call the .traverse method:
+        alert.traverse(pth)
 
-        # Create GitAlert instance
-        # Check is not really executed, hence a simple Mock as
-        # repos argument suffices:
-        alert = GitAlert(mock_path, Mock())
-        # Mock the check method so its invocation can be tested:
-        alert.check = MagicMock(name="check")
+        # Check if the .traverse method returned early:
+        pth.glob.assert_not_called()
 
-        alert.traverse(mock_path)
+    def test_traverse_git_present(self):
+        # Mock pth, repos and ignore:
+        pth = MagicMock()
 
-        # Test if glob is called correctly:
-        mock_path.glob.assert_called_once_with("*")
-        # Test if check method is called correctly:
-        alert.check.assert_called_once_with(dir)
+        # Mock path's content,
+        # containing two files:
 
-    @patch("git_alert.traverse.Path")
-    def test_traverse_git_not_present(self, mock_path):
-        # Mock the return value of the glob method:
-        glob_result = []
+        # Mock git directory:
+        file_1 = MagicMock()
+        file_1.is_dir.return_value = True
 
-        # Mock one file:
-        dir = Mock()
-        dir.is_dir.return_value = False
-        dir.name = "some_file"
+        # Mock text file:
+        file_2 = MagicMock()
+        file_2.is_dir.return_value = False
 
-        # Add the mocked file to the glob result:
-        glob_result.append(dir)
-        # The return value of glob needs to be iterable:
-        mock_path.glob.return_value = iter(glob_result)
+        files = [file_1, file_2]
 
-        # Create GitAlert instance
-        # Check is not really executed, hence a simple Mock as
-        # repos argument suffices:
-        alert = GitAlert(mock_path, Mock())
-        # Mock the check method so its invocation can be tested:
-        alert.check = MagicMock(name="check")
+        # Mock the glob method of the path object,
+        # note: glob returns a generator of Path objects:
+        pth.glob.return_value = (file for file in files)
 
-        alert.traverse(mock_path)
+        # Mock the joinpath method of the path object:
+        git_dir = MagicMock()
+        pth.joinpath.return_value = git_dir
 
-        # Test if glob is called correctly:
-        mock_path.glob.assert_called_once_with("*")
-        # Test if check method is not called:
-        alert.check.assert_not_called()
+        # Make sure pth contains a .git directory:
+        git_dir.__eq__.return_value = True
 
-    @patch("git_alert.traverse.Path")
-    def test_traverse_only_dir(self, mock_path):
-        # Mock the return value of the glob method:
-        glob_result = []
+        # Mock the repositories object:
+        repos = Mock()
+        repos.add_repo = MagicMock(name="add_repo")
 
-        # Mock one path that is a git repository:
-        dir = Mock()
-        dir.is_dir.return_value = True
-        dir.name = "some_dir"
+        # Mock the ignore list:
+        ignore = []
 
-        # Add the mocked git directory to the glob result:
-        glob_result.append(dir)
-        # The return value of glob needs to be iterable:
-        mock_path.glob.return_value = iter(glob_result)
+        # Create a GitAlert instance:
+        alert = GitAlert(pth, repos, ignore)
 
-        # Mock subdir
-        glob_result_sub_dir = []
+        # Call the .traverse method:
+        alert.traverse(pth)
 
-        # Mock one file:
-        sub_dir = Mock()
-        sub_dir.is_dir.return_value = False
-        sub_dir.name = "some_file"
+        # Check if the glob method was called correctly:
+        pth.glob.assert_called_once_with("*")
 
-        glob_result_sub_dir.append(sub_dir)
-        dir.glob.return_value = iter(glob_result_sub_dir)
+        # Check if the add_repo method was called correctly:
+        repos.add_repo.assert_called_once_with({"path": pth, "status": None})
 
-        # Create GitAlert instance
-        # Check is not really executed, hence a simple Mock as
-        # repos argument suffices:
-        alert = GitAlert(mock_path, Mock())
-        # Mock the check method so its invocation can be tested:
-        alert.check = MagicMock(name="check")
+    def test_traverse_git_not_present(self):
+        # Mock pth, repos and ignore:
+        pth = MagicMock()
 
-        alert.traverse(mock_path)
+        # Mock path's content,
+        # containing two files:
 
-        # Test if glob is called correctly:
-        mock_path.glob.assert_called_once_with("*")
+        # Mock directory:
+        file_1 = MagicMock()
+        file_1.is_dir.return_value = True
 
-        # Test if subdir is looked through:
-        dir.glob.assert_called_once_with("*")
-        # Test if check method is NOT called:
-        alert.check.assert_not_called()
+        sub_file_1 = MagicMock()
+        sub_file_1.is_dir.return_value = False
+        sub_file_2 = MagicMock()
+        sub_file_2.is_dir.return_value = False
+
+        # Mock .glob of file_1:
+        sub_files = [sub_file_1, sub_file_2]
+        file_1.glob.return_value = (file for file in sub_files)
+
+        # Mock text file:
+        file_2 = MagicMock()
+        file_2.is_dir.return_value = False
+
+        # Mock the glob method of the path object,
+        # note: glob returns a generator of Path objects:
+        files = [file_1, file_2]
+        pth.glob.return_value = (file for file in files)
+
+        # Mock the joinpath method of the path object:
+        git_dir = MagicMock()
+        pth.joinpath.return_value = git_dir
+
+        # Make sure pth does not contain a .git directory:
+        git_dir.__eq__.return_value = False
+
+        # Mock the repositories object:
+        repos = Mock()
+        repos.add_repo = MagicMock(name="add_repo")
+
+        # Mock the ignore list:
+        ignore = []
+
+        # Create a GitAlert instance:
+        alert = GitAlert(pth, repos, ignore)
+
+        # Call the .traverse method:
+        alert.traverse(pth)
+
+        # Check if the glob method was called correctly:
+        pth.glob.assert_called_once_with("*")
+
+        # Check if the glob method was called on the subdirectory:
+        file_1.glob.assert_called_once_with("*")
+
+        # Check if the add_repo method was not called:
+        repos.add_repo.assert_not_called()
 
 
 class TestGitAlertTraversePermissionDenied(unittest.TestCase):
@@ -138,18 +156,18 @@ class TestGitAlertCheck(unittest.TestCase):
         output.stdout.decode.return_value = "working tree clean"
         mock_subprocess.run.return_value = output
 
-        pth = Mock()
-        pth.parent = "/parent"
-
-        # Create GitAlert instance
+        # Dicttionary of one repository:
         repos = Mock()
+        repos.repos = {"/directory": {"status": None}}
+
+        # Create GitAlert instance:
         alert = GitAlert(Mock(), repos)
 
-        # Call the check method on the mocked path:
-        alert.check(pth)
-        # Assert whether the mocked repo's add_repo method was calles
-        # appropriately:
-        repos.add_repo.assert_called_once_with({"/parent": "clean"})
+        # Call the .check method:
+        alert.check()
+
+        # Verify that the list of repositories was updated correctly:
+        self.assertEqual(repos.repos, {"/directory": {"status": "clean"}})
 
     @patch("git_alert.traverse.subprocess")
     def test_git_alert_check_dirty(self, mock_subprocess):
@@ -158,18 +176,18 @@ class TestGitAlertCheck(unittest.TestCase):
         output.stdout.decode.return_value = "Changes not staged for commit"
         mock_subprocess.run.return_value = output
 
-        pth = Mock()
-        pth.parent = "/parent"
-
-        # Create GitAlert instance
+        # Dicttionary of one repository:
         repos = Mock()
+        repos.repos = {"/directory": {"status": None}}
+
+        # Create GitAlert instance:
         alert = GitAlert(Mock(), repos)
 
-        # Call the check method on the mocked path:
-        alert.check(pth)
-        # Assert whether the mocked repo's add_repo method was calles
-        # appropriately:
-        repos.add_repo.assert_called_once_with({"/parent": "dirty"})
+        # Call the .check method:
+        alert.check()
+
+        # Verify that the list of repositories was updated correctly:
+        self.assertEqual(repos.repos, {"/directory": {"status": "dirty"}})
 
 
 class TestGitAlertRepos(unittest.TestCase):
