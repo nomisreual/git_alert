@@ -21,7 +21,6 @@ def argument_parser(args) -> Namespace:
     parser.add_argument(
         "--path",
         type=Path,
-        default=Path.cwd(),
         help="top level directory to start the search in",
     )
     parser.add_argument(

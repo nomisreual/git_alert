@@ -32,7 +32,10 @@ class ReadConfig:
 
     @property
     def path(self):
-        return Path(self.__config.get("path"))
+        path = self.__config.get("path", None)
+        if path:
+            return Path(path)
+        return Path.cwd()
 
     @property
     def only_dirty(self):

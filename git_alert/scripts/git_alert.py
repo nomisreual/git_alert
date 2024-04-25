@@ -1,6 +1,7 @@
 import sys
 
 from git_alert.argument_parser import argument_parser
+from git_alert.configuration import ReadConfig
 from git_alert.repositories import Repositories
 from git_alert.traverse import GitAlert
 
@@ -8,11 +9,27 @@ from git_alert.traverse import GitAlert
 def run():
     repos = Repositories()
 
+    # Read configuration file:
+    config = ReadConfig()
+
+    # Get the path, only_dirty and ignore from the configuration class:
+    path = config.path
+    only_dirty = config.only_dirty
+    ignore = config.ignore
+
     args = argument_parser(sys.argv[1:])
 
-    alert = GitAlert(pth=args.path, ignore=args.ignore, repos=repos)
+    # Override the configuration file with the command line arguments:
+    if args.path:
+        path = args.path
+    if args.only_dirty:
+        only_dirty = args.only_dirty
+    if args.ignore:
+        ignore = args.ignore
 
-    alert.traverse(args.path)
+    alert = GitAlert(pth=path, ignore=ignore, repos=repos)
+
+    alert.traverse(path)
     alert.check()
-    alert.repos.display(only_dirty=args.only_dirty)
+    alert.repos.display(only_dirty=only_dirty)
     alert.repos.summary()
