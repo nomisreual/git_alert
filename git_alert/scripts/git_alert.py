@@ -1,7 +1,7 @@
 import sys
 
 from git_alert.argument_parser import argument_parser
-from git_alert.configuration import ReadConfig
+from git_alert.configuration import ReadConfig, System
 from git_alert.repositories import Repositories
 from git_alert.traverse import GitAlert
 
@@ -9,8 +9,11 @@ from git_alert.traverse import GitAlert
 def run():
     repos = Repositories()
 
+    # Create System class
+    system = System()
+
     # Read configuration file:
-    config = ReadConfig()
+    config = ReadConfig(system)
 
     # Get the path, only_dirty and ignore from the configuration class:
     path = config.path

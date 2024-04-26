@@ -1,49 +1,54 @@
 import os
 import sys
 import tomllib
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 
-PLATFORM = sys.platform
-USER = os.environ.get("USER")
-CONFIG_ROOT = Path("/home") / USER / ".config/git_alert"
-CONFIG_FILE = CONFIG_ROOT / "config.toml"
+
+class System:
+    def __init__(self):
+        self.platform = sys.platform
+        self.user = os.environ.get("USER")
+
+    @property
+    def config_root(self):
+        if self.platform != "win32":
+            return Path("/home") / self.user / ".config/git_alert"
+        else:
+            return PureWindowsPath(f"C:/Users/{self.user}/AppData/Local/git_alert")
+
+    @property
+    def config_file(self):
+        return self.config_root / "config.toml"
 
 
 class ReadConfig:
 
-    USER = os.environ.get("USER")
+    def __init__(self, system: System):
+        self.CONFIG_FILE = system.config_file
 
-    if sys.platform == "win32":
-        CONFIG_ROOT = Path("C:/Users") / USER / "AppData/Roaming/git_alert"
-    else:
-        CONFIG_ROOT = Path("/home") / USER / ".config/git_alert"
-
-    CONFIG_FILE = CONFIG_ROOT / "config.toml"
-
-    def __init__(self):
         try:
-            with open(CONFIG_FILE, "rb") as f:
-                self.__config = tomllib.load(f)
+            with open(self.CONFIG_FILE, "rb") as f:
+                self._config = tomllib.load(f)
         except FileNotFoundError:
-            self.__config = None
+            self._config = None
         except tomllib.TOMLDecodeError as err:
             print(f"Error decoding config file: {err}", file=sys.stderr)
-            self.__config = None
+            self._config = None
 
     @property
     def path(self):
-        path = self.__config.get("path", None)
+        path = self._config.get("path", None)
         if path:
             return Path(path)
         return Path.cwd()
 
     @property
     def only_dirty(self):
-        return self.__config.get("only_dirty")
+        return self._config.get("only_dirty")
 
     @property
     def ignore(self):
-        to_be_ignored = self.__config.get("ignore")
+        to_be_ignored = self._config.get("ignore")
         if to_be_ignored is None:
             return []
         return [Path(path) for path in to_be_ignored.values()]
