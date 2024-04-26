@@ -113,6 +113,35 @@ options:
 Warning: adding a path to ignore will also ignore all subdirectories of that path.
 ```
 
+## Configuration:
+
+Git Alert can be configured using a configuration file. The configuration file is expected to be in either:
+
+```
+$XDG_CONFIG_HOME/git_alert/config.toml (usually ~/.config/git_alert/config.toml)
+```
+
+or (if you are on Windows):
+
+```
+%APPDATA%\git_alert\config.toml (usually C:\Users\<username>\AppData\Roaming\git_alert\config.toml)
+```
+
+The configuration file is in TOML format and can contain the following options:
+
+```toml
+path = "/path/to/start/search/in"
+
+only_dirty = true # only show dirty repositories in the final report
+
+[ignore]
+one_directory = '/path/to/one_directory'
+another_directory = '/path/to/another_directory'
+```
+
+Hence, the configuration file closely resembles the command line options. The command line options will always override the configuration file. However,
+_only_dirty_ is a special case. If it is set to true in the configuration file, it will be applied. The command line flag can only turn it on, not off.
+
 ## Development:
 
 The tool is aimed to be improved and extended going forward. If you have any ideas or want to contribute, feel free to open an issue or a pull request.
