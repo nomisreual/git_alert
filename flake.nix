@@ -1,30 +1,17 @@
 {
-  description = "git_alert";
+  description = "Git Alert";
 
   inputs = {
-    flake-utils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    poetry2nix = {
-      url = "github:nix-community/poetry2nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
   };
 
   outputs = {
     self,
     nixpkgs,
-    flake-utils,
-    poetry2nix,
-  }:
-    flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
-      inherit (poetry2nix.lib.mkPoetry2Nix {inherit pkgs;}) mkPoetryApplication;
-    in {
-      packages = {
-        git_alert = mkPoetryApplication {
-          projectDir = self;
-        };
-        default = self.packages.${system}.git_alert;
-      };
-    });
+  }: let
+    system = "x86_64-linux";
+    pkgs = nixpkgs.legacyPackages.${system};
+  in {
+    packages.${system}.default = import ./default.nix {inherit pkgs;};
+  };
 }
