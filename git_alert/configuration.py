@@ -1,20 +1,16 @@
 import os
 import sys
 import tomllib
-from pathlib import Path, PureWindowsPath
+from pathlib import Path
 
 
 class System:
     def __init__(self):
-        self.platform = sys.platform
         self.user = os.environ.get("USER")
 
     @property
     def config_root(self):
-        if self.platform != "win32":
-            return Path("/home") / self.user / ".config/git_alert"
-        else:
-            return PureWindowsPath(f"C:/Users/{self.user}/AppData/Local/git_alert")
+        return Path("/home") / str(self.user) / ".config/git_alert"
 
     @property
     def config_file(self):

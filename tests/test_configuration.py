@@ -1,28 +1,15 @@
-import os
 import tomllib
 import unittest
-from pathlib import Path, PureWindowsPath
+from pathlib import Path
 from unittest.mock import mock_open, patch
 
 from git_alert.configuration import ReadConfig, System
-
-
-class TestSystemWindows(unittest.TestCase):
-    @patch("sys.platform", "win32")
-    def test_system_windows(self):
-        system = System()
-        self.assertEqual(system.platform, "win32")
-        self.assertEqual(
-            system.config_root,
-            PureWindowsPath("C:/Users/simon/AppData/Local/git_alert"),
-        )
 
 
 class TestSystemLinux(unittest.TestCase):
     @patch("sys.platform", "linux")
     def test_system(self):
         system = System()
-        self.assertEqual(system.platform, "linux")
         self.assertEqual(
             system.config_root, Path("/home") / "simon" / ".config/git_alert"
         )
