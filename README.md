@@ -115,16 +115,10 @@ Warning: adding a path to ignore will also ignore all subdirectories of that pat
 
 ## Configuration:
 
-Git Alert can be configured using a configuration file. The configuration file is expected to be in either:
+Git Alert can be configured using a configuration file. The configuration file is expected to be in:
 
 ```
 $XDG_CONFIG_HOME/git_alert/config.toml (usually ~/.config/git_alert/config.toml)
-```
-
-or (if you are on Windows):
-
-```
-%APPDATA%\git_alert\config.toml (usually C:\Users\<username>\AppData\Roaming\git_alert\config.toml)
 ```
 
 The configuration file is in TOML format and can contain the following options:
@@ -151,7 +145,8 @@ The tool is aimed to be improved and extended going forward. If you have any ide
 - [ ] more detailed checks (currently it distinguishes only between a repository being clean or not)
 - [ ] speed up the lookup process
 - [ ] enable caching found repositories for faster checking after the first run (maybe utilizing a database)
-- [ ] GUI interface
+- [ ] GUI/ TUI interface
+- [ ] override default configuration file location with command line option
 
 ## Contributing:
 
