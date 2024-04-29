@@ -29,7 +29,7 @@ class TestReadConfig(unittest.TestCase):
             config = ReadConfig(System())
 
             # Make assertions:
-            self.assertIsNone(config._config)
+            self.assertEqual(config._config, {})
             mock_file.assert_called_once_with(config.CONFIG_FILE, "rb")
 
     @patch("git_alert.configuration.tomllib.load")
@@ -78,5 +78,5 @@ class TestReadConfig(unittest.TestCase):
             config = ReadConfig(System())
 
             # Make assertions:
-            self.assertIsNone(config._config)
+            self.assertEqual(config._config, {})
             mock_load.assert_called_once()
