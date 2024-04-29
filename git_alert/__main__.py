@@ -5,20 +5,19 @@ from git_alert.configuration import ReadConfig, System
 from git_alert.repositories import Repositories
 from git_alert.traverse import GitAlert
 
+args = argument_parser(sys.argv[1:])
 repos = Repositories()
 
 # Create System class
 system = System()
 
 # Read configuration file:
-config = ReadConfig(system)
+config = ReadConfig(system, config=args.config)
 
 # Get the path, only_dirty and ignore from the configuration class:
 path = config.path
 only_dirty = config.only_dirty
 ignore = config.ignore
-
-args = argument_parser(sys.argv[1:])
 
 # Override the configuration file with the command line arguments:
 if args.path:
