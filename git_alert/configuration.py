@@ -19,8 +19,11 @@ class System:
 
 class ReadConfig:
 
-    def __init__(self, system: System):
-        self.CONFIG_FILE = system.config_file
+    def __init__(self, system: System, config=None):
+        if config:
+            self.CONFIG_FILE = config
+        else:
+            self.CONFIG_FILE = system.config_file
 
         try:
             with open(self.CONFIG_FILE, "rb") as f:
