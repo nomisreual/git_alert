@@ -30,6 +30,7 @@ def argument_parser(args) -> Namespace:
         help="only show dirty repositories in the final report",
     )
     parser.add_argument(
+        "-i",
         "--ignore",
         type=ignore_paths,
         default=[],
@@ -37,4 +38,11 @@ def argument_parser(args) -> Namespace:
     )
 
     parser.add_argument("-v", "--version", action="version", version="%(prog)s 0.2.0")
+
+    parser.add_argument(
+        "-c",
+        "--config",
+        type=Path,
+        help="path to the configuration file",
+    )
     return parser.parse_args(args)
