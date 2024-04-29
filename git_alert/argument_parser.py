@@ -19,6 +19,7 @@ def argument_parser(args) -> Namespace:
         epilog="Warning: adding a path to ignore will also ignore all subdirectories of that path."
     )
     parser.add_argument(
+        "-p",
         "--path",
         type=Path,
         help="top level directory to start the search in",
@@ -34,4 +35,6 @@ def argument_parser(args) -> Namespace:
         default=[],
         help="colon separated list of paths to ignore",
     )
+
+    parser.add_argument("-v", "--version", action="version", version="%(prog)s 1.0")
     return parser.parse_args(args)
