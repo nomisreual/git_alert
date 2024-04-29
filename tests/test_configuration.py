@@ -80,3 +80,7 @@ class TestReadConfig(unittest.TestCase):
             # Make assertions:
             self.assertEqual(config._config, {})
             mock_load.assert_called_once()
+
+    def test_read_config_custom_path(self):
+        config = ReadConfig(System(), config="some/path")
+        self.assertEqual(config.CONFIG_FILE, "some/path")
