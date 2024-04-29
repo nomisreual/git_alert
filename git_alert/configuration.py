@@ -29,10 +29,11 @@ class ReadConfig:
             with open(self.CONFIG_FILE, "rb") as f:
                 self._config = tomllib.load(f)
         except FileNotFoundError:
-            self._config = None
+            print(f"Config file not found: {self.CONFIG_FILE}", file=sys.stderr)
+            self._config = {}
         except tomllib.TOMLDecodeError as err:
             print(f"Error decoding config file: {err}", file=sys.stderr)
-            self._config = None
+            self._config = {}
 
     @property
     def path(self):
