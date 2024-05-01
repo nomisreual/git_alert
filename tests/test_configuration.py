@@ -40,55 +40,57 @@ class TestReadConfig(unittest.TestCase):
 
     @patch("git_alert.configuration.tomllib.load")
     def test_read_success_with_path(self, mock_load):
-        mock_load.return_value = {"path": "/some/path"}
-        config = ReadConfig(System())
-        mock_load.assert_called_once()
-        self.assertEqual(config.path, Path("/some/path"))
+        with patch("builtins.open", mock_open()):
+            mock_load.return_value = {"path": "/some/path"}
+            config = ReadConfig(System())
+            mock_load.assert_called_once()
+            self.assertEqual(config.path, Path("/some/path"))
 
     @patch("git_alert.configuration.Path.cwd")
     @patch("git_alert.configuration.tomllib.load")
     def test_read_success_without_path(self, mock_load, mock_cwd):
-        mock_load.return_value = {}
-        mock_cwd.return_value = Path("/some/path")
-        config = ReadConfig(System())
-        mock_load.assert_called_once()
-        self.assertEqual(config.path, Path("/some/path"))
+        with patch("builtins.open", mock_open()):
+            mock_load.return_value = {}
+            mock_cwd.return_value = Path("/some/path")
+            config = ReadConfig(System())
+            mock_load.assert_called_once()
+            self.assertEqual(config.path, Path("/some/path"))
 
     @patch("git_alert.configuration.tomllib.load")
     def test_read_success_without_ignore(self, mock_load):
-        mock_load.return_value = {}
-        config = ReadConfig(System())
-        mock_load.assert_called_once()
-        self.assertEqual(config.ignore, [])
+        with patch("builtins.open", mock_open()):
+            mock_load.return_value = {}
+            config = ReadConfig(System())
+            mock_load.assert_called_once()
+            self.assertEqual(config.ignore, [])
 
     @patch("git_alert.configuration.tomllib.load")
     def test_read_success_with_ignore(self, mock_load):
-        mock_load.return_value = {"ignore": {"local": "/some/path"}}
-        config = ReadConfig(System())
-        mock_load.assert_called_once()
-        self.assertEqual(config.ignore, [Path("/some/path")])
+        with patch("builtins.open", mock_open()):
+            mock_load.return_value = {"ignore": {"local": "/some/path"}}
+            config = ReadConfig(System())
+            mock_load.assert_called_once()
+            self.assertEqual(config.ignore, [Path("/some/path")])
 
     @patch("git_alert.configuration.tomllib.load")
     def test_read_success_with_only_dirty(self, mock_load):
-        mock_load.return_value = {"only_dirty": True}
-        config = ReadConfig(System())
-        mock_load.assert_called_once()
-        self.assertTrue(config.only_dirty)
+        with patch("builtins.open", mock_open()):
+            mock_load.return_value = {"only_dirty": True}
+            config = ReadConfig(System())
+            mock_load.assert_called_once()
+            self.assertTrue(config.only_dirty)
 
     @patch("git_alert.configuration.tomllib.load")
-    # @patch("os.environ.get")
     def test_read_config_decode_error(self, mock_load):
-        # mock_user.return_value = "test_user"
-        # with patch("git_alert.configuration.tomllib.load") as mock_load:
-        # Add side effect to the mock_file object to raise a FileNotFoundError
-        mock_load.side_effect = tomllib.TOMLDecodeError()
+        with patch("builtins.open", mock_open()):
+            mock_load.side_effect = tomllib.TOMLDecodeError()
 
-        # Call the ReadConfig init method:
-        config = ReadConfig(System())
+            # Call the ReadConfig init method:
+            config = ReadConfig(System())
 
-        # Make assertions:
-        self.assertEqual(config._config, {})
-        mock_load.assert_called_once()
+            # Make assertions:
+            self.assertEqual(config._config, {})
+            mock_load.assert_called_once()
 
     def test_read_config_custom_path(self):
         config = ReadConfig(System(), config="some/path")
