@@ -19,9 +19,9 @@ def argument_parser(args) -> Namespace:
         epilog="Warning: adding a path to ignore will also ignore all subdirectories of that path."
     )
     parser.add_argument(
+        "-p",
         "--path",
         type=Path,
-        default=Path.cwd(),
         help="top level directory to start the search in",
     )
     parser.add_argument(
@@ -30,9 +30,19 @@ def argument_parser(args) -> Namespace:
         help="only show dirty repositories in the final report",
     )
     parser.add_argument(
+        "-i",
         "--ignore",
         type=ignore_paths,
         default=[],
         help="colon separated list of paths to ignore",
+    )
+
+    parser.add_argument("-v", "--version", action="version", version="%(prog)s 0.2.0")
+
+    parser.add_argument(
+        "-c",
+        "--config",
+        type=Path,
+        help="path to the configuration file",
     )
     return parser.parse_args(args)
