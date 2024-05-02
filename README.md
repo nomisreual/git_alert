@@ -141,7 +141,7 @@ another_directory = '/path/to/another_directory'
 ```
 
 Hence, the configuration file closely resembles the command line options. The command line options will always override the configuration file. However,
-_only_dirty_ is a special case. If it is set to true in the configuration file, it will be applied. The command line flag can only turn it on, not off.
+_only_dirty_ is a special case. If it is set to true in the configuration file, it will be applied. The command line flag can only turn it on, not off. For reference, an example configuration file can be found in _docs_.
 
 ## Development:
 
@@ -153,29 +153,16 @@ The tool is aimed to be improved and extended going forward. If you have any ide
 - [ ] speed up the lookup process
 - [ ] enable caching found repositories for faster checking after the first run (maybe utilizing a database)
 - [ ] GUI/ TUI interface
-- [ ] override default configuration file location with command line option
+- [x] enable configuration with a configuration file
+- [x] override default configuration file location with command line option
 
 ## Contributing:
 
-This project is under active development, so any contributions are welcome. Feel free to open an issue or a pull request.
+This project is under active development, so any contributions are welcome. Feel free to open an issue or submit a pull request.
 
 In case you want to submit a pull request, please:
 
 - make sure to run the tests before submission
-- use black for code formatting
+- use black (or similar tools) for code formatting
 
 The project uses pre-commit hooks to ensure code quality, so feel free to use them as well.
-usage: git_alert [-h] [-p PATH] [--only_dirty] [-i IGNORE] [-v] [-c CONFIG]
-
-options:
--h, --help show this help message and exit
--p PATH, --path PATH top level directory to start the search in
---only_dirty only show dirty repositories in the final report
--i IGNORE, --ignore IGNORE
-colon separated list of paths to ignore
--v, --version show program's version number and exit
--c CONFIG, --config CONFIG
-path to the configuration file
-
-Warning: adding a path to ignore will also ignore all subdirectories of that
-path.

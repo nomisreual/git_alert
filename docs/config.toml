@@ -1,0 +1,7 @@
+path = "/path/to/start/search/in"
+
+only_dirty = true
+
+[ignore]
+one_directory = '/path/to/one_directory'
+another_directory = '/path/to/another_directory'
