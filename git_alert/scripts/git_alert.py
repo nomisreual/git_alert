@@ -46,3 +46,7 @@ def run():
     report.create_long_report_table()
     report.populate_long_report_table()
     report.display_long_report()
+
+    report.create_summary_table()
+    report.populate_short_table()
+    report.display_summary_report()
