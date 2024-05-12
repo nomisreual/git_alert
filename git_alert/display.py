@@ -1,5 +1,6 @@
 from rich.console import Console
 from rich.table import Table
+from rich.text import Text
 
 from git_alert.repositories import Repositories
 
@@ -9,6 +10,13 @@ class Report:
         self.console = Console()
         self.repos = repos
         self.only_dirty = only_dirty
+
+    @staticmethod
+    def style_status(status: str) -> Text:
+        if status == "dirty":
+            return Text(status, style="bold red")
+        else:
+            return Text(status, style="bold green")
 
     def create_long_report_table(self) -> None:
         self.long_report = Table(title="Full Report")
@@ -33,7 +41,11 @@ class Report:
             status = repo.get("status")
             if self.only_dirty and status == "clean":
                 continue
-            self.long_report.add_row(str(pth.name), status, str(pth))
+            self.long_report.add_row(
+                str(pth.name),
+                self.style_status(status),
+                Text(str(pth), style="bold cyan"),
+            )
 
     def populate_short_table(self) -> None:
         self.summary_report.add_row(
