@@ -11,6 +11,7 @@ class TestGitAlertRepositories(unittest.TestCase):
         repositories.add_repo(repo)
 
         self.assertEqual(repositories.repos, {"/path/to/repo": {"status": "clean"}})
+        self.assertEqual(repositories.number_of_dirty_repositories, 0)
 
     def test_git_alert_repositories_add_repo_dirty(self):
         repositories = Repositories()
@@ -18,6 +19,7 @@ class TestGitAlertRepositories(unittest.TestCase):
         repositories.add_repo(repo)
 
         self.assertEqual(repositories.repos, {"/path/to/repo": {"status": "dirty"}})
+        self.assertEqual(repositories.number_of_dirty_repositories, 1)
 
 
 # class TestGitAlertRepositoriesDisplayOnlyDirty(unittest.TestCase):
