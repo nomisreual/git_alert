@@ -15,13 +15,11 @@ class System:
             return Path("/Users") / str(self.user) / ".config/git_alert"
         elif self.platform == "linux":
             return Path("/home") / str(self.user) / ".config/git_alert"
-        else:
-            print(f"Unsupported platform: {self.platform}", file=sys.stderr)
-            sys.exit(1)
 
     @property
     def config_file(self):
-        return self.config_root / "config.toml"
+        if self.config_root:
+            return self.config_root / "config.toml"
 
 
 class ReadConfig:
