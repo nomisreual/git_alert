@@ -10,19 +10,39 @@ from git_alert.configuration import ReadConfig, System
 class TestSystemLinux(unittest.TestCase):
     @patch("os.environ.get")
     def test_system(self, mock_user):
-        mock_user.return_value = "test_user"
-        system = System()
-        self.assertEqual(
-            system.config_root,
-            Path("/home") / str(os.environ.get("USER")) / ".config/git_alert",
-        )
-        self.assertEqual(
-            system.config_file,
-            Path("/home")
-            / str(os.environ.get("USER"))
-            / ".config/git_alert"
-            / "config.toml",
-        )
+        with patch("sys.platform", "linux"):
+            mock_user.return_value = "test_user"
+            system = System()
+            self.assertEqual(
+                system.config_root,
+                Path("/home") / str(os.environ.get("USER")) / ".config/git_alert",
+            )
+            self.assertEqual(
+                system.config_file,
+                Path("/home")
+                / str(os.environ.get("USER"))
+                / ".config/git_alert"
+                / "config.toml",
+            )
+
+
+class TestSystemDarwin(unittest.TestCase):
+    @patch("os.environ.get")
+    def test_system(self, mock_user):
+        with patch("sys.platform", "darwin"):
+            mock_user.return_value = "test_user"
+            system = System()
+            self.assertEqual(
+                system.config_root,
+                Path("/Users") / str(os.environ.get("USER")) / ".config/git_alert",
+            )
+            self.assertEqual(
+                system.config_file,
+                Path("/Users")
+                / str(os.environ.get("USER"))
+                / ".config/git_alert"
+                / "config.toml",
+            )
 
 
 class TestReadConfig(unittest.TestCase):
