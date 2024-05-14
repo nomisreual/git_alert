@@ -7,14 +7,19 @@ from pathlib import Path
 class System:
     def __init__(self):
         self.user = os.environ.get("USER")
+        self.platform = sys.platform
 
     @property
     def config_root(self):
-        return Path("/home") / str(self.user) / ".config/git_alert"
+        if self.platform == "darwin":
+            return Path("/Users") / str(self.user) / ".config/git_alert"
+        elif self.platform == "linux":
+            return Path("/home") / str(self.user) / ".config/git_alert"
 
     @property
     def config_file(self):
-        return self.config_root / "config.toml"
+        if self.config_root:
+            return self.config_root / "config.toml"
 
 
 class ReadConfig:
