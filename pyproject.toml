@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "git_alert"
-version = "0.3.2"
+version = "0.3.3"
 
 description = "Checks a given path and its sub-directories for dirty git repositories."
 authors = ["Simon Antonius Lauer <simon.lauer@posteo.de>"]
