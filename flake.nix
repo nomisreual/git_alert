@@ -9,9 +9,12 @@
     self,
     nixpkgs,
   }: let
-    system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
+    system-linux = "x86_64-linux";
+    system-darwin = "x86_64-darwin";
+    pkgs-linux = nixpkgs.legacyPackages.${system-linux};
+    pkgs-darwin = nixpkgs.legacyPackages.${system-darwin};
   in {
-    packages.${system}.default = import ./default.nix {inherit pkgs;};
+    packages.${system-linux}.default = import ./default.nix {pkgs = pkgs-linux;};
+    packages.${system-darwin}.default = import ./default.nix {pkgs = pkgs-darwin;};
   };
 }
