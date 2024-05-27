@@ -39,36 +39,28 @@ class RepositoriesDB:
                 connection.rollback()
                 print("An error occured")
 
-    @staticmethod
-    def check(pth: Path) -> None:
-        """
-        Check if the git repositories found are clean or dirty.
-        """
-        output = subprocess.run(["git", "status"], cwd=pth, stdout=subprocess.PIPE)
-        if "working tree clean" in output.stdout.decode():
-            return "clean"
-        else:
-            return "dirty"
-
     def update_status(self):
         with sqlite3.connect(self.db) as connection:
             cursor = connection.cursor()
-            paths = cursor.execute("SELECT path FROM paths")
-            while True:
-                pth = paths.fetchone()
-                if pth:
-                    pth = pth[0]
-                    print(self.decompress_path(pth))
-                else:
-                    break
+            try:
 
-            # try:
-            #     cursor.execute(
-            #         "UPDATE TABLE projects SET status_id",
-            #         ()
-            #     )
-            # except sqlite3.Error:
-            #     print("Something went wrong...")
+                cursor.execute("SELECT id, path FROM paths")
+                pths = cursor.fetchall()
+
+                for pth in pths:
+                    id, pth = pth
+                    pth = self.decompress_path(pth)
+                    status = git_status.check(pth)
+                    cursor.execute(
+                        "SELECT id, desc FROM status WHERE desc = ?", (status,)
+                    )
+                    status_id, status = cursor.fetchone()
+                    connection.execute(
+                        "UPDATE projects SET status_id = ? WHERE path_id = ?",
+                        (status_id, id),
+                    )
+            except sqlite3.Error:
+                print("An error occured")
 
 
 class GitAlertDB:
@@ -103,28 +95,33 @@ class GitAlertDB:
         except PermissionError:
             print(f"Warning: no access to: {pth}", file=sys.stderr)
 
-    def check(self) -> None:
-        """
-        Check if the git repositories found are clean or dirty.
-        """
-        for pth, repo in self._repos.repos.items():
-            output = subprocess.run(["git", "status"], cwd=pth, stdout=subprocess.PIPE)
-            if "working tree clean" in output.stdout.decode():
-                repo["status"] = "clean"
-            else:
-                repo["status"] = "dirty"
-
     @property
     def repos(self) -> RepositoriesDB:
         return self._repos
 
 
+class GitStatus:
+
+    @staticmethod
+    def check(pth: Path) -> None:
+        """
+        Check if the git repositories found are clean or dirty.
+        """
+        output = subprocess.run(["git", "status"], cwd=pth, stdout=subprocess.PIPE)
+        if "working tree clean" in output.stdout.decode():
+            return "clean"
+        else:
+            return "dirty"
+
+
 DB = Path("/home/simon/Projects/git_alert/git_alert/app.db")
-ROOT = Path("/home/simon/Projects")
+ROOT = Path("/home/simon")
+
+git_status = GitStatus()
+
 repository = RepositoriesDB(DB)
-# git_alert = GitAlertDB(pth=Path(ROOT), repos=repository)
 
-# git_alert.traverse(ROOT)
-
+git_alert = GitAlertDB(pth=Path(ROOT), repos=repository)
+git_alert.traverse(ROOT)
 
 repository.update_status()
