@@ -7,14 +7,23 @@ from pathlib import Path
 
 class RepositoriesDB:
     def __init__(self, db: Path) -> None:
+        """
+        Repositories simply point to the sqlite file.
+        """
         self.db = db
 
     @staticmethod
     def compress_path(path: Path) -> bytes:
+        """
+        Compress a given path.
+        """
         return zlib.compress(str(path).encode("utf-8"))
 
     @staticmethod
     def decompress_path(compressed_path: bytes) -> str:
+        """
+        Decompress a given compressed path.
+        """
         return zlib.decompress(compressed_path).decode("utf-8")
 
     def add_repo(self, repo: dict[str, str]):
@@ -43,7 +52,6 @@ class RepositoriesDB:
         with sqlite3.connect(self.db) as connection:
             cursor = connection.cursor()
             try:
-
                 cursor.execute("SELECT id, path FROM paths")
                 pths = cursor.fetchall()
 
@@ -101,7 +109,6 @@ class GitAlertDB:
 
 
 class GitStatus:
-
     @staticmethod
     def check(pth: Path) -> None:
         """
@@ -118,10 +125,11 @@ DB = Path("/home/simon/Projects/git_alert/git_alert/app.db")
 ROOT = Path("/home/simon")
 
 git_status = GitStatus()
-
-repository = RepositoriesDB(DB)
-
-git_alert = GitAlertDB(pth=Path(ROOT), repos=repository)
-git_alert.traverse(ROOT)
-
-repository.update_status()
+print(git_status.check(Path("/home/simon/Projects/git_alert/")))
+#
+# repository = RepositoriesDB(DB)
+#
+# git_alert = GitAlertDB(pth=Path(ROOT), repos=repository)
+# git_alert.traverse(ROOT)
+#
+# repository.update_status()
