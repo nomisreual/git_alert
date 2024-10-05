@@ -1,8 +1,11 @@
 { pkgs ? import <nixpkgs> { } }:
 with pkgs.python311Packages;
+let
+  manifest = (pkgs.lib.importTOML ./pyproject.toml).tool.poetry;
+in
 buildPythonApplication rec {
-  pname = "git_alert";
-  version = "0.3.3";
+  pname = manifest.name;
+  version = manifest.version;
   format = "pyproject";
   src = fetchPypi {
     inherit pname version;
