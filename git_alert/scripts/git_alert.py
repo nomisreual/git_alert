@@ -8,7 +8,6 @@ from git_alert.traverse import GitAlert
 
 
 def run():
-
     args = argument_parser(sys.argv[1:])
     repos = Repositories()
 

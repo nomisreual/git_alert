@@ -23,7 +23,6 @@ class System:
 
 
 class ReadConfig:
-
     def __init__(self, system: System, config=None):
         if config:
             self.CONFIG_FILE = config

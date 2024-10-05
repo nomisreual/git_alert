@@ -103,7 +103,6 @@ class TestReport(unittest.TestCase):
 
     @patch("git_alert.display.Console")
     def test_display_long_report(self, mock_console):
-
         repo = Mock()
         report = Report(repo, Mock())
 
@@ -114,7 +113,6 @@ class TestReport(unittest.TestCase):
 
     @patch("git_alert.display.Console")
     def test_display_summary_report(self, mock_console):
-
         repo = Mock()
         report = Report(repo, Mock())
 
