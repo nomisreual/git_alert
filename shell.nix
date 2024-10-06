@@ -2,13 +2,14 @@
 with pkgs.python311Packages;
 let
   manifest = (pkgs.lib.importTOML ./pyproject.toml).tool.poetry;
-  local = buildPythonApplication {
+  local = buildPythonPackage {
     name = manifest.name;
     src = ./.;
     propagatedBuildInputs = [ rich ];
     build-system = [
       poetry-core
     ];
+    pyproject = true;
   };
 in
 pkgs.mkShell {
