@@ -1,8 +1,9 @@
 { pkgs ? import <nixpkgs> { } }:
 with pkgs.python311Packages;
 let
+  manifest = (pkgs.lib.importTOML ./pyproject.toml).tool.poetry;
   local = buildPythonApplication {
-    name = "git-alert-dev";
+    name = manifest.name;
     src = ./.;
     propagatedBuildInputs = [ rich ];
     build-system = [
