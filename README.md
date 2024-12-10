@@ -150,9 +150,9 @@ The tool is aimed to be improved and extended going forward. If you have any ide
 ## Goals:
 
 - [ ] more detailed checks (currently it distinguishes only between a repository being clean or not)
-- [ ] speed up the lookup process
 - [ ] enable caching found repositories for faster checking after the first run (maybe utilizing a database)
 - [ ] GUI/ TUI interface
+- [x] speed up the lookup process
 - [x] enable configuration with a configuration file
 - [x] override default configuration file location with command line option
 
