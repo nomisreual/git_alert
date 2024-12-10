@@ -18,23 +18,12 @@ class GitAlert:
         args:
             pth: Path
         """
-        if pth in self._ignore:
-            return
 
-        try:
-            files = list(pth.glob("*"))
-
-            if pth.joinpath(".git") in files:
-                repo = {}
-                repo["path"] = pth
-                repo["status"] = None
-                self._repos.add_repo(repo)
-            else:
-                for file in files:
-                    if file.is_dir():
-                        self.traverse(file)
-        except PermissionError:
-            print(f"Warning: no access to: {pth}", file=sys.stderr)
+        for file in pth.rglob("*.git"):
+            repo = {}
+            repo["path"] = file.parent
+            repo["status"] = None
+            self._repos.add_repo(repo)
 
     def check(self) -> None:
         """
