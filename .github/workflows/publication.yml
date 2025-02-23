@@ -1,8 +1,8 @@
 name: git_alert_publish
-on:
-  push:
-    tags:
-      - "v*.*.*"
+# on:
+#   push:
+#     tags:
+#       - "v*.*.*"
 jobs:
   build:
     runs-on: ubuntu-latest
