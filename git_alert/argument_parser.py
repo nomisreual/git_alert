@@ -37,7 +37,7 @@ def argument_parser(args) -> Namespace:
         help="colon separated list of paths to ignore",
     )
 
-    parser.add_argument("-v", "--version", action="version", version="%(prog)s 0.3.3")
+    parser.add_argument("-v", "--version", action="version", version="%(prog)s 0.4.0")
 
     parser.add_argument(
         "-c",

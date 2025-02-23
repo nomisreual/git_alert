@@ -1,32 +1,26 @@
-[tool.poetry]
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
 name = "git_alert"
-version = "0.3.3"
-
+version = "0.4.0"
 description = "Checks a given path and its sub-directories for dirty git repositories."
-authors = ["Simon Antonius Lauer <simon.lauer@posteo.de>"]
 readme = "README.md"
-license = "MIT"
-packages = [{include = "git_alert"}]
+license = {file = "LICENSE"}
+requires-python = ">=3.11.9"
+dependencies = [
+    "rich>=13.9.4",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-rich = "^13.7.1"
-
-
-[tool.poetry.group.test.dependencies]
-pytest = "^8.1.1"
-pytest-cov = "^5.0.0"
-
-
-[tool.poetry.group.development.dependencies]
-flake8 = "^7.0.0"
-black = "^24.3.0"
-pre-commit = "^3.7.0"
-
-
-[tool.poetry.scripts]
+[project.scripts]
 git_alert = "git_alert.scripts.git_alert:run"
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "pytest-cov>=6.0.0",
+    "pytest>=8.3.4",
+    "flake8>=7.1.1",
+    "black>=24.10.0",
+    "pre-commit>=4.0.1",
+]
