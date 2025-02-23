@@ -1,13 +1,13 @@
 { pkgs ? import <nixpkgs> { } }:
 with pkgs.python311Packages;
 let
-  manifest = (pkgs.lib.importTOML ./pyproject.toml).tool.poetry;
+  manifest = (pkgs.lib.importTOML ./pyproject.toml).project;
   local = buildPythonPackage {
     name = manifest.name;
     src = ./.;
     propagatedBuildInputs = [ rich ];
     build-system = [
-      poetry-core
+      hatchling
     ];
     pyproject = true;
   };
