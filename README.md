@@ -26,13 +26,13 @@ Alternatively, you can use _pipx_ to make it globally available:
 pipx install git_alert
 ```
 
-Of course you can also clone the repository and install it manually. The package is built using poetry, so the easiest way to build it locally would be
-to use poetry:
+Of course you can also clone the repository and install it manually. The package is built using hatch and utilizing uv as build front-end, so the easiest way to build it locally would be
+to use uv:
 
 ```
 git clone https://github.com/nomisreual/git_alert.git
 cd git_alert
-poetry build
+uv build
 ```
 
 After the build, you can install it either using pip or pipx:
