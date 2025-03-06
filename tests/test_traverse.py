@@ -148,6 +148,7 @@ class TestGitAlertTraversePermissionDenied(unittest.TestCase):
         # )
 
 
+# TODO: Need to adjust the test to reflect using libgit2
 class TestGitAlertCheck(unittest.TestCase):
     @patch("git_alert.traverse.subprocess")
     def test_git_alert_check_clean(self, mock_subprocess):
