@@ -1,6 +1,6 @@
 from rich.console import Console
-from rich.table import Table
 from rich.text import Text
+from rich.table import Table
 
 from git_alert.repositories import Repositories
 
