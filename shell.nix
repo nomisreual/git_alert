@@ -1,5 +1,6 @@
 {pkgs ? import <nixpkgs> {}}:
 with pkgs.python311Packages; let
+  # possibly easier to do a local build
   # manifest = (pkgs.lib.importTOML ./pyproject.toml).project;
   # local = pkgs.callPackage ./default.nix {};
   # local = buildPythonPackage {
@@ -13,11 +14,17 @@ with pkgs.python311Packages; let
   # };
 in
   pkgs.mkShell {
-    packages = [
-      (pkgs.python311.withPackages (python-pkgs:
-        with python-pkgs; [
-          rich
-          # local
-        ]))
-    ];
+    packages =
+      [
+        (pkgs.python311.withPackages (python-pkgs:
+          with python-pkgs; [
+            # additional development python packages
+          ]))
+      ]
+      ++ (with pkgs; [
+        # additional development dependencies outside python
+      ]);
+
+    # Grab build inputs from package:
+    inputsFrom = [(pkgs.callPackage ./default.nix {})];
   }
