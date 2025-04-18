@@ -10,8 +10,11 @@ in
       inherit pname version;
       sha256 = "sha256-edGskDzNnzLOV2P2RKn88DtrwgYhx3f5WIHWfyxVJ80=";
     };
-    propagatedBuildInputs = [
+    dependencies = [
       rich
+    ];
+    nativeCheckInputs = [
+      pytest
     ];
     build-system = [
       hatchling
