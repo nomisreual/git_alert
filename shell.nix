@@ -19,10 +19,15 @@ in
         (pkgs.python311.withPackages (python-pkgs:
           with python-pkgs; [
             # additional development python packages
+            pytest
+            pytest-cov
+            flake8
+            black
           ]))
       ]
       ++ (with pkgs; [
         # additional development dependencies outside python
+        pre-commit
       ]);
 
     # Grab build inputs from package:
