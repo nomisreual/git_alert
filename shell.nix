@@ -1,17 +1,15 @@
 {pkgs ? import <nixpkgs> {}}:
 with pkgs.python311Packages; let
-  # possibly easier to do a local build
-  # manifest = (pkgs.lib.importTOML ./pyproject.toml).project;
-  # local = pkgs.callPackage ./default.nix {};
-  # local = buildPythonPackage {
-  #   name = manifest.name;
-  #   src = ./.;
-  #   propagatedBuildInputs = [rich];
-  #   build-system = [
-  #     hatchling
-  #   ];
-  #   pyproject = true;
-  # };
+  manifest = (pkgs.lib.importTOML ./pyproject.toml).project;
+  local = buildPythonPackage {
+    name = manifest.name;
+    src = ./.;
+    dependencies = [rich];
+    build-system = [
+      hatchling
+    ];
+    pyproject = true;
+  };
 in
   pkgs.mkShell {
     packages =
@@ -23,6 +21,8 @@ in
             pytest-cov
             flake8
             black
+
+            local
           ]))
       ]
       ++ (with pkgs; [
