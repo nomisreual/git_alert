@@ -2,7 +2,7 @@
 with pkgs.python311Packages; let
   manifest = (pkgs.lib.importTOML ./pyproject.toml).project;
 in
-  buildPythonApplication rec {
+  buildPythonPackage rec {
     pname = manifest.name;
     version = manifest.version;
     format = "pyproject";
