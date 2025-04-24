@@ -28,6 +28,7 @@ in
       ++ (with pkgs; [
         # additional development dependencies outside python
         pre-commit
+        hatch # for building and publishing to pypi
       ]);
 
     # Grab build inputs from package:
