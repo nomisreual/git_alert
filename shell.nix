@@ -33,4 +33,9 @@ in
 
     # Grab build inputs from package:
     inputsFrom = [(pkgs.callPackage ./default.nix {})];
+    shellHook = ''
+      # set SHELL to current system shell, which points to
+      # an interactive shell
+      export SHELL=/run/current-system/sw/bin/bash
+    '';
   }
