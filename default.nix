@@ -2,7 +2,7 @@
 with pkgs.python311Packages; let
   manifest = (pkgs.lib.importTOML ./pyproject.toml).project;
 in
-  buildPythonApplication rec {
+  buildPythonPackage rec {
     pname = manifest.name;
     version = manifest.version;
     format = "pyproject";
@@ -10,8 +10,11 @@ in
       inherit pname version;
       sha256 = "sha256-edGskDzNnzLOV2P2RKn88DtrwgYhx3f5WIHWfyxVJ80=";
     };
-    propagatedBuildInputs = [
+    dependencies = [
       rich
+    ];
+    nativeCheckInputs = [
+      pytest
     ];
     build-system = [
       hatchling
