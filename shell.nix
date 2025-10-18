@@ -21,5 +21,4 @@ in
         ]))
       pkgs.pre-commit
     ];
-
   }
