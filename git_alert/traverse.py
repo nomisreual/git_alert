@@ -1,5 +1,5 @@
 # traverse.py
-import subprocess
+import pygit2
 
 # import sys
 from pathlib import Path
@@ -37,8 +37,9 @@ class GitAlert:
         Check if the git repositories found are clean or dirty.
         """
         for pth, repo in self._repos.repos.items():
-            output = subprocess.run(["git", "status"], cwd=pth, stdout=subprocess.PIPE)
-            if "working tree clean" in output.stdout.decode():
+            repoobject = pygit2.Repository(pth)
+            repostatus = repoobject.status()
+            if repostatus == {}:
                 repo["status"] = "clean"
             else:
                 repo["status"] = "dirty"
