@@ -1,4 +1,3 @@
-import sys
 import unittest
 from unittest.mock import MagicMock, Mock, patch
 
@@ -146,50 +145,6 @@ class TestGitAlertTraversePermissionDenied(unittest.TestCase):
         # mock_print.assert_called_once_with(
         #     f"Warning: no access to: {mock_path}", file=sys.stderr
         # )
-
-
-# TODO: Need to adjust the test to reflect using libgit2
-
-# class TestGitAlertCheck(unittest.TestCase):
-#     @patch("git_alert.traverse.subprocess")
-#     def test_git_alert_check_clean(self, mock_subprocess):
-#         # Mock the return value of the subprocess.run method:
-#         output = Mock()
-#         output.stdout.decode.return_value = "working tree clean"
-#         mock_subprocess.run.return_value = output
-#
-#         # Dicttionary of one repository:
-#         repos = Mock()
-#         repos.repos = {"/directory": {"status": None}}
-#
-#         # Create GitAlert instance:
-#         alert = GitAlert(Mock(), repos)
-#
-#         # Call the .check method:
-#         alert.check()
-#
-#         # Verify that the list of repositories was updated correctly:
-#         self.assertEqual(repos.repos, {"/directory": {"status": "clean"}})
-#
-#     @patch("git_alert.traverse.subprocess")
-#     def test_git_alert_check_dirty(self, mock_subprocess):
-#         # Mock the return value of the subprocess.run method:
-#         output = Mock()
-#         output.stdout.decode.return_value = "Changes not staged for commit"
-#         mock_subprocess.run.return_value = output
-#
-#         # Dicttionary of one repository:
-#         repos = Mock()
-#         repos.repos = {"/directory": {"status": None}}
-#
-#         # Create GitAlert instance:
-#         alert = GitAlert(Mock(), repos)
-#
-#         # Call the .check method:
-#         alert.check()
-#
-#         # Verify that the list of repositories was updated correctly:
-#         self.assertEqual(repos.repos, {"/directory": {"status": "dirty"}})
 
 
 class TestGitAlertRepos(unittest.TestCase):
