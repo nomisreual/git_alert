@@ -1,5 +1,6 @@
 name: git_alert_publish
 on:
+  workflow_dispatch:
   push:
     tags:
       - "v*.*.*"
