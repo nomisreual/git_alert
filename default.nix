@@ -8,10 +8,11 @@ in
     format = "pyproject";
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-edGskDzNnzLOV2P2RKn88DtrwgYhx3f5WIHWfyxVJ80=";
+      sha256 = "sha256-UerScLf8VYgZND/iX/LH42z/F0MaLeXYxNWGb7dNdzE=";
     };
     dependencies = [
       rich
+      pygit2
     ];
     nativeCheckInputs = [
       pytest
