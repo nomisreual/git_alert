@@ -1,8 +1,9 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
+requires = ["uv_build>=0.10.10,<0.11.0"]
+# requires = ["uv_build"]
+build-backend = "uv_build"
 [project]
+
 name = "git_alert"
 version = "0.4.2"
 description = "Checks a given path and its sub-directories for dirty git repositories."
