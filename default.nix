@@ -8,7 +8,7 @@ in
     format = "pyproject";
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-UerScLf8VYgZND/iX/LH42z/F0MaLeXYxNWGb7dNdzE=";
+      sha256 = "sha256-41bOT6xRUHmmoViq9aHGNQH1otGbtMpRzwZAXj8M0dc=";
     };
     dependencies = [
       rich
