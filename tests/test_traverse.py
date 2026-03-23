@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import MagicMock, Mock, patch
 
 from git_alert.traverse import GitAlert
+from pathlib import Path
 
 
 class TestGitAlertTraverse(unittest.TestCase):
@@ -151,7 +152,9 @@ class TestGitAlertRepos(unittest.TestCase):
     def test_git_alert_repos(self):
         # Create GitAlert instance
         repos = Mock()
-        alert = GitAlert(Mock(), repos)
+
+        path = Path("/tmp")
+        alert = GitAlert(path, repos)
 
         # Assert whether the repos property returns the correct value:
         repos_call = alert.repos
