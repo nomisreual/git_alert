@@ -1,48 +1,52 @@
 # traverse.py
 import pygit2
 
-# import sys
 from pathlib import Path
+import os
 
 from git_alert.repositories import Repositories
 
 
 class GitAlert:
-    def __init__(self, pth: Path, repos: Repositories, ignore: list[str] = []) -> None:
-        self._pth = pth
+    def __init__(
+        self, pth: Path, repos: Repositories, ignore: list[str] | None = None
+    ) -> None:
+        self._pth = Path(pth).resolve()
         self._repos = repos
-        self._ignore = {pth: True for pth in ignore}
+        self._ignore = {Path(p).resolve() for p in (ignore or [])}
 
-    def traverse(self, pth: Path) -> None:
-        """
-        Traverse the directory and its subdirectories and check if it is a git repository.
-        args:
-            pth: Path
-        """
+    def _is_ignored(self, path: Path) -> bool:
+        return any(path == ign or path.is_relative_to(ign) for ign in self._ignore)
 
-        for file in pth.rglob("*.git"):
-            ignore_file = False
-            for ign in self._ignore.keys():
-                if ign in file.parents:
-                    ignore_file = True
-            if ignore_file:
-                continue
-            repo = {}
-            repo["path"] = file.parent
-            repo["status"] = None
-            self._repos.add_repo(repo)
+    def traverse(self, pth: Path | None = None) -> None:
+
+        start_path = Path(pth).resolve() if pth else self._pth
+
+        for root, dirs, files in os.walk(start_path):
+            root_path = Path(root)
+
+            dirs[:] = [d for d in dirs if not self._is_ignored(root_path / d)]
+
+            if ".git" in dirs or ".git" in files:
+                self._repos.add_repo(
+                    {
+                        "path": root_path,
+                        "status": None,
+                    }
+                )
+
+                dirs[:] = [d for d in dirs if d != ".git"]
 
     def check(self) -> None:
         """
         Check if the git repositories found are clean or dirty.
         """
         for pth, repo in self._repos.repos.items():
-            repoobject = pygit2.Repository(pth)
-            repostatus = repoobject.status()
-            if repostatus == {}:
-                repo["status"] = "clean"
-            else:
-                repo["status"] = "dirty"
+            try:
+                repoobject = pygit2.Repository(pth)
+                repo["status"] = "clean" if not repoobject.status() else "dirty"
+            except (pygit2.GitError, OSError):
+                repo["status"] = "invalid"
 
     @property
     def repos(self) -> Repositories:
