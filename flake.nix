@@ -69,6 +69,7 @@
           packages = [
             virtualenv
             pkgs.uv
+            pkgs.pre-commit
           ];
           env = {
             UV_NO_SYNC = "1";
