@@ -77,6 +77,7 @@
             UV_PYTHON_DOWNLOADS = "never";
           };
           shellHook = ''
+            exec fish
             unset PYTHONPATH
             export REPO_ROOT=$(git rev-parse --show-toplevel)
             uv sync
