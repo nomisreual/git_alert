@@ -39,9 +39,9 @@
       sourcePreference = "wheel";
     };
 
-    # editableOverlay = workspace.mkEditablePyprojectOverlay {
-    #   root = "$REPO_ROOT";
-    # };
+    editableOverlay = workspace.mkEditablePyprojectOverlay {
+      root = "$REPO_ROOT";
+    };
 
     pythonSets = forAllSystems (
       system: let
@@ -62,8 +62,7 @@
     devShells = forAllSystems (
       system: let
         pkgs = nixpkgs.legacyPackages.${system};
-        # pythonSet = pythonSets.${system}.overrideScope editableOverlay;
-        pythonSet = pythonSets.${system};
+        pythonSet = pythonSets.${system}.overrideScope editableOverlay;
         virtualenv = pythonSet.mkVirtualEnv "dev-env" workspace.deps.all;
       in {
         default = pkgs.mkShell {
@@ -79,6 +78,7 @@
           shellHook = ''
             unset PYTHONPATH
             export REPO_ROOT=$(git rev-parse --show-toplevel)
+            uv sync
           '';
         };
       }
