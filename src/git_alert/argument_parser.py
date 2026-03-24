@@ -1,5 +1,6 @@
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
+from importlib.metadata import version
 
 
 def argument_parser(args) -> Namespace:
@@ -37,7 +38,12 @@ def argument_parser(args) -> Namespace:
         help="colon separated list of paths to ignore",
     )
 
-    parser.add_argument("-v", "--version", action="version", version="%(prog)s 0.4.2")
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version=f"%(prog)s {version('git_alert')}",
+    )
 
     parser.add_argument(
         "-c",
