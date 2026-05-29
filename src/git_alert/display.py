@@ -6,10 +6,11 @@ from git_alert.repositories import Repositories
 
 
 class Report:
-    def __init__(self, repos: Repositories, only_dirty: bool) -> None:
+    def __init__(self, repos: Repositories, only_dirty: bool, simple: bool) -> None:
         self.console = Console()
         self.repos = repos
         self.only_dirty = only_dirty
+        self.simple = simple
 
     @staticmethod
     def style_status(status: str) -> Text:
@@ -17,6 +18,12 @@ class Report:
             return Text(status, style="bold red")
         else:
             return Text(status, style="bold green")
+
+    def is_all_clean(self) -> bool:
+        """
+        Whether or not all repositories are clean.
+        """
+        return self.repos.number_of_dirty_repositories == 0
 
     def create_long_report_table(self) -> None:
         self.long_report = Table(title="Full Report")

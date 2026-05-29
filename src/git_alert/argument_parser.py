@@ -39,6 +39,13 @@ def argument_parser(args) -> Namespace:
     )
 
     parser.add_argument(
+        "-s",
+        "--simple",
+        action="store_true",
+        help="Displays an 'All good' only if all repositories are clean. Otherwise, it calls for 'work to be done'",
+    )
+
+    parser.add_argument(
         "-v",
         "--version",
         action="version",

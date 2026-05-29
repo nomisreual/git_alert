@@ -21,6 +21,7 @@ def run():
     path = config.path
     only_dirty = config.only_dirty
     ignore = config.ignore
+    simple = config.simple
 
     # Override the configuration file with the command line arguments:
     if args.path:
@@ -29,23 +30,41 @@ def run():
         only_dirty = args.only_dirty
     if args.ignore:
         ignore = args.ignore
+    if args.simple:
+        simple = args.simple
 
-    report = Report(repos=repos, only_dirty=only_dirty)
+    # TODO: add simple to config parser
+    # for now it's only cli argument
+    simple = args.simple
+
+    report = Report(repos=repos, only_dirty=only_dirty, simple=simple)
 
     alert = GitAlert(pth=path, ignore=ignore, repos=repos)
 
-    with report.console.status("Indexing repositories...", spinner="bouncingBall"):
+    def populate_tables():
+        report.create_long_report_table()
+        report.populate_long_report_table()
+        report.display_long_report()
+
+    def show_tables():
+        report.create_summary_table()
+        report.populate_short_table()
+        report.display_summary_report()
+
+    if report.simple:
         alert.traverse(path)
-    print("✅ Successfully indexed.")
-
-    with report.console.status("Checking repositories...", spinner="bouncingBall"):
         alert.check()
-    print("✅ Successfully checked.")
+        if report.is_all_clean():
+            print("All good!")
+        else:
+            print("Work needed.")
+    else:
+        with report.console.status("Indexing repositories...", spinner="bouncingBall"):
+            alert.traverse(path)
+        print("✅ Successfully indexed.")
 
-    report.create_long_report_table()
-    report.populate_long_report_table()
-    report.display_long_report()
-
-    report.create_summary_table()
-    report.populate_short_table()
-    report.display_summary_report()
+        with report.console.status("Checking repositories...", spinner="bouncingBall"):
+            alert.check()
+        print("✅ Successfully checked.")
+        populate_tables()
+        show_tables()

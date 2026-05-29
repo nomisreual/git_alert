@@ -56,3 +56,11 @@ class ReadConfig:
         if to_be_ignored is None:
             return []
         return [Path(path) for path in to_be_ignored.values()]
+
+    @property
+    def simple(self):
+        """
+        If you are only interested in knowing whether everything is clean or not,
+        use this flag.
+        """
+        return self._config.get("simple")
