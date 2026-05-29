@@ -7,11 +7,11 @@ from git_alert.display import Report
 
 class TestReport(unittest.TestCase):
     def test_init(self):
-        report = Report(Mock(), Mock())
+        report = Report(Mock(), Mock(), Mock())
         self.assertIsInstance(report, Report)
 
     def test_style_status_dirty(self):
-        report = Report(Mock(), Mock())
+        report = Report(Mock(), Mock(), Mock())
         style_status = report.style_status("dirty")
         style = style_status.style
         text = style_status._text
@@ -19,7 +19,7 @@ class TestReport(unittest.TestCase):
         self.assertEqual(style, "bold red")
 
     def test_style_status_clean(self):
-        report = Report(Mock(), Mock())
+        report = Report(Mock(), Mock(), Mock())
         style_status = report.style_status("clean")
         style = style_status.style
         text = style_status._text
@@ -30,7 +30,7 @@ class TestReport(unittest.TestCase):
         repo = Mock()
         repo.number_of_repositories = 3
         repo.number_of_dirty_repositories = 2
-        report = Report(repo, False)
+        report = Report(repo, False, Mock())
 
         report.create_summary_table()
         report.populate_short_table()
@@ -51,7 +51,7 @@ class TestReport(unittest.TestCase):
             Path("/some/project"): {"status": "dirty"},
             Path("/other/project"): {"status": "clean"},
         }
-        report = Report(repo, False)
+        report = Report(repo, False, Mock())
 
         report.create_long_report_table()
         report.populate_long_report_table()
@@ -79,7 +79,7 @@ class TestReport(unittest.TestCase):
             Path("/some/project"): {"status": "dirty"},
             Path("/other/project"): {"status": "clean"},
         }
-        report = Report(repo, True)
+        report = Report(repo, True, Mock())
 
         report.create_long_report_table()
         report.populate_long_report_table()
@@ -104,7 +104,7 @@ class TestReport(unittest.TestCase):
     @patch("git_alert.display.Console")
     def test_display_long_report(self, mock_console):
         repo = Mock()
-        report = Report(repo, Mock())
+        report = Report(repo, Mock(), Mock())
 
         report.create_long_report_table()
         report.display_long_report()
@@ -114,7 +114,7 @@ class TestReport(unittest.TestCase):
     @patch("git_alert.display.Console")
     def test_display_summary_report(self, mock_console):
         repo = Mock()
-        report = Report(repo, Mock())
+        report = Report(repo, Mock(), Mock())
 
         report.create_summary_table()
         report.display_summary_report()
